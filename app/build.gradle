@@ -50,4 +50,7 @@ dependencies {
 
     //OkHttp
     implementation "com.squareup.okhttp3:okhttp:$okhttp"
+
+    // Coroutines
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 }

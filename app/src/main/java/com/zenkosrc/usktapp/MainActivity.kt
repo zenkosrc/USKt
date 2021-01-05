@@ -5,31 +5,30 @@ import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import com.zenkosrc.usktapp.api.RetrofitInstance
-import com.zenkosrc.usktapp.api.responses.SearchResponse
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.zenkosrc.usktapp.repository.Repository
 import com.zenkosrc.usktapp.utils.AppTextChangeListener
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
     private val TAG = MainActivity::class.simpleName
 
+    private lateinit var viewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        RetrofitInstance.apiService.gerSearchPictures(BuildConfig.API_KEY, "London").enqueue(object :Callback<SearchResponse> {
-
-            override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
-
+        val repository = Repository()
+        val viewModelFactory = MainViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel.getSearchPictures("London")
+        viewModel.picturesResponse.observe(this, Observer { response ->
+            if (response.isSuccessful){
                 Log.d(TAG, response.body().toString())
-            }
-
-            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-
-                Log.d(TAG, t.toString())
+            }else{
+                Log.d(TAG, response.toString())
             }
         })
     }
