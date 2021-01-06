@@ -20,10 +20,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initViewModel()
+    }
+
+    private fun initViewModel() {
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        viewModel.getSearchPictures("London")
         viewModel.picturesResponse.observe(this, Observer { response ->
             if (response.isSuccessful){
                 Log.d(TAG, response.body().toString())
@@ -42,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         searchView.setOnQueryTextListener(AppTextChangeListener{
             Log.d(TAG, it)
+            viewModel.getSearchPictures(it!!)
 
         })
         return super.onCreateOptionsMenu(menu)
