@@ -32,6 +32,7 @@ android {
 ext {
     retrofit = "2.9.0"
     okhttp = "4.8.0"
+    glide = "4.11.0"
 }
 
 dependencies {
@@ -54,4 +55,7 @@ dependencies {
 
     // Coroutines
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glide"
 }

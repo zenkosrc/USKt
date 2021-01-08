@@ -14,4 +14,17 @@ data class ImageData(
 
     @SerializedName("urls")
     val urls: Map<String, String>
-)
+){
+
+    fun getSmall(): String? {
+        return urls["small"]
+    }
+
+    fun getRegular(): String? {
+        return urls["regular"]
+    }
+
+    fun getFull(): String? {
+        return urls["full"]
+    }
+}

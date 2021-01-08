@@ -7,7 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
 import com.zenkosrc.usktapp.adapter.PictureListAdapter
 import com.zenkosrc.usktapp.repository.Repository
 import com.zenkosrc.usktapp.utils.AppTextChangeListener
@@ -58,6 +59,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initRecyclerview() {
         pictureListRecyclerView.adapter = pictureListAdapter
-        pictureListRecyclerView.layoutManager = LinearLayoutManager(this)
+        pictureListRecyclerView.layoutManager = StaggeredGridLayoutManager(2, VERTICAL)
     }
 }

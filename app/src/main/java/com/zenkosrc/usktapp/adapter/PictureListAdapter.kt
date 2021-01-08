@@ -1,11 +1,13 @@
 package com.zenkosrc.usktapp.adapter
 
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.zenkosrc.usktapp.R
 import com.zenkosrc.usktapp.api.responses.ImageData
 import kotlinx.android.synthetic.main.picture_list_item.view.*
@@ -30,12 +32,14 @@ class PictureListAdapter: RecyclerView.Adapter<PictureListAdapter.ViewHolder>() 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
-        val pictureImageView: ImageView = itemView.pictureImageView
-
         fun bind(imageData: ImageData){
-            //TODO: Add Glige
-        }
 
+            Glide.with(itemView.context)
+                .load(imageData.getSmall())
+                .thumbnail(0.3f)
+                .placeholder(ColorDrawable(ContextCompat.getColor(itemView.context, android.R.color.transparent)))
+                .into(itemView.pictureImageView);
+        }
     }
 
     fun setData(newList: List<ImageData>){
