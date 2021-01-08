@@ -7,20 +7,39 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.zenkosrc.usktapp.adapter.PictureListAdapter
 import com.zenkosrc.usktapp.repository.Repository
 import com.zenkosrc.usktapp.utils.AppTextChangeListener
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private val TAG = MainActivity::class.simpleName
 
     private lateinit var viewModel: MainViewModel
+    private val pictureListAdapter by lazy { PictureListAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initViewModel()
+        initRecyclerview()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+
+        val searchItem = menu?.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.setQueryHint(resources.getString(R.string.action_search))
+        searchView.setOnQueryTextListener(AppTextChangeListener{
+            Log.d(TAG, it)
+            viewModel.getSearchPictures(it!!)
+
+        })
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun initViewModel() {
@@ -30,24 +49,15 @@ class MainActivity : AppCompatActivity() {
         viewModel.picturesResponse.observe(this, Observer { response ->
             if (response.isSuccessful){
                 Log.d(TAG, response.body().toString())
+                response.body()?.imageDataList?.let { pictureListAdapter.setData(it) }
             }else{
                 Log.d(TAG, response.toString())
             }
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-
-        val searchItem = menu?.findItem(R.id.action_search)
-        val searchView = searchItem?.actionView as SearchView
-        searchView.setQueryHint(resources.getString(R.string.action_search))
-
-        searchView.setOnQueryTextListener(AppTextChangeListener{
-            Log.d(TAG, it)
-            viewModel.getSearchPictures(it!!)
-
-        })
-        return super.onCreateOptionsMenu(menu)
+    private fun initRecyclerview() {
+        pictureListRecyclerView.adapter = pictureListAdapter
+        pictureListRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 }
