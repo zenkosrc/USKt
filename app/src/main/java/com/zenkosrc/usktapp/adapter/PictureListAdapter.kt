@@ -17,6 +17,7 @@ class PictureListAdapter: RecyclerView.Adapter<PictureListAdapter.ViewHolder>() 
     private val TAG = PictureListAdapter::class.simpleName
 
     private var imageList = emptyList<ImageData>()
+    var onItemClick: ((ImageData) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.picture_list_item, parent, false))
@@ -31,6 +32,12 @@ class PictureListAdapter: RecyclerView.Adapter<PictureListAdapter.ViewHolder>() 
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+
+        init {
+            itemView.setOnClickListener {
+                onItemClick?.invoke(imageList[adapterPosition])
+            }
+        }
 
         fun bind(imageData: ImageData){
 
@@ -47,5 +54,4 @@ class PictureListAdapter: RecyclerView.Adapter<PictureListAdapter.ViewHolder>() 
         Log.d(TAG, "Image list size ${imageList.size}")
         notifyDataSetChanged()
     }
-
 }

@@ -1,5 +1,6 @@
 package com.zenkosrc.usktapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -9,10 +10,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
+import com.zenkosrc.usktapp.PictureActivity.Companion.ORIGINAL_SIZE_URL
+import com.zenkosrc.usktapp.PictureActivity.Companion.REGULAR_SIZE_URL
 import com.zenkosrc.usktapp.adapter.PictureListAdapter
+import com.zenkosrc.usktapp.api.responses.ImageData
 import com.zenkosrc.usktapp.repository.Repository
 import com.zenkosrc.usktapp.utils.AppTextChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,5 +65,16 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerview() {
         pictureListRecyclerView.adapter = pictureListAdapter
         pictureListRecyclerView.layoutManager = StaggeredGridLayoutManager(2, VERTICAL)
+
+        pictureListAdapter.onItemClick = { image ->
+            startPictureActivity(image)
+        }
+    }
+
+    private fun startPictureActivity(imageData: ImageData){
+        val intent = Intent(this, PictureActivity::class.java)
+        intent.putExtra(ORIGINAL_SIZE_URL, imageData.getFull())
+        intent.putExtra(REGULAR_SIZE_URL, imageData.getRegular())
+        startActivity(intent)
     }
 }
