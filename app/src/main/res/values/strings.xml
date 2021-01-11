@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">USKtApp</string>
 
-    <!-- Main menu   -->
+    <!-- Main menu -->
     <string name="action_search">Search</string>
+
+    <!-- Main menu -->
+    <string name="action_save">Save</string>
 </resources>
